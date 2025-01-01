@@ -2,8 +2,15 @@ import styles from './Post.module.css'
 import { Comment } from './Comment'
 import { Avatar } from './Avatar'
 import { LineSegment } from 'phosphor-react'
+import { useState } from 'react'
 
 export function Post({ author, publishedAt, content }) {
+    const [comments, setComments] = useState([
+        'Post muito Bacana hein'
+    ])
+
+    const [newCommentText, setNewCommentText] = useState('');
+
     const publishedDateFormatted = new Intl.DateTimeFormat('pt-BR', {
         day: '2-digit',
         month: 'long',
@@ -11,6 +18,18 @@ export function Post({ author, publishedAt, content }) {
         minute: '2-digit',
          
     }).format(publishedAt)
+
+    function handleCreateNewComment() {
+        event.preventDefault();
+
+        setComments([...comments,newCommentText])
+        setNewCommentText('');
+    }
+
+    function handleCreateNewCommentChange(){
+        setNewCommentText(event.target.value);
+    }
+
     return (
         <article className={styles.post}>
             <header>
@@ -40,10 +59,15 @@ export function Post({ author, publishedAt, content }) {
                 })}
             </div>
 
-            <form className={styles.commentForm}>
+            <form onSubmit={handleCreateNewComment} className={styles.commentForm}>
                 <strong> Deixe seu comentário </strong>
 
-                <textarea placeholder='Deixe um comentário'></textarea>
+                <textarea 
+                    name="commentTextArea" 
+                    placeholder='Deixe um comentário'
+                    onChange={handleCreateNewCommentChange}
+                    value={newCommentText}
+                />
 
                 <footer>
                     <button type="submit"> Comentar</button>
@@ -51,9 +75,10 @@ export function Post({ author, publishedAt, content }) {
             </form>
 
             <div className={styles.commentList}>
-                <Comment />
-                <Comment />
-                <Comment />
+                {comments.map(comment =>{
+                        return <Comment content={comment}/>
+                    })
+                }
             </div>
         </article>
     )
