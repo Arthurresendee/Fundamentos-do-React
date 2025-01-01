@@ -1,29 +1,43 @@
 import styles from './Post.module.css'
 import { Comment } from './Comment'
 import { Avatar } from './Avatar'
+import { LineSegment } from 'phosphor-react'
 
-export function Post() {
+export function Post({ author, publishedAt, content }) {
+    const publishedDateFormatted = new Intl.DateTimeFormat('pt-BR', {
+        day: '2-digit',
+        month: 'long',
+        hour: '2-digit',
+        minute: '2-digit',
+         
+    }).format(publishedAt)
     return (
         <article className={styles.post}>
             <header>
                 <div className={styles.author}>
-                    <Avatar hasBorder={true} src="https://github.com/diego3g.png" />
+                    <Avatar
+                        hasBorder={true}
+                        src={author.avatarUrl}
+                    />
                     <div className={styles.authorInfo}>
-                        <strong>Diego Fernandes</strong>
-                        <span>Web Developer</span>
+                        <strong>{author.name}</strong>
+                        <span>{author.role}</span>
                     </div>
                 </div>
 
-                <time title='08 de Maio às 08:13h' dateTime="2022-05-11 08:13:30">Publicado há 1h</time>
+                <time title={publishedDateFormatted} dateTime={publishedDateFormatted}>
+                    {publishedDateFormatted}
+                </time>
             </header>
 
             <div className={styles.content}>
-                <p> Fala Galera!</p>
-
-                <p>pipipipoe poirhgp e oricgnbluie rhgxcwqulrkg qcngrxhrg nr hxgwehxnwlug xl kurgh</p>
-
-                <p> <a href="#">ghhjgj/sadhfldsjkhkjd</a> </p>
-                <p> <a href="#">#novo projeto</a> <a href="#">#nlwRocketseat</a> </p>
+                {content.map(line => {
+                    if(line.type === 'paragraph'){
+                        return <p>{line.content}</p>
+                    } else if (line.type ==='link'){
+                        return <p><a href="">{line.content}</a></p>
+                    }
+                })}
             </div>
 
             <form className={styles.commentForm}>
@@ -37,9 +51,9 @@ export function Post() {
             </form>
 
             <div className={styles.commentList}>
-                <Comment/>
-                <Comment/>
-                <Comment/>
+                <Comment />
+                <Comment />
+                <Comment />
             </div>
         </article>
     )
