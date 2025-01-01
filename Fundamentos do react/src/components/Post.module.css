@@ -96,7 +96,16 @@
     color: var(--gray-100);
     line-height: 1.4;
     margin-top: 1rem;
+}
 
+.commentForm footer{
+    visibility: hidden;
+    max-height: 0;
+}
+
+.commentForm:focus-within footer{
+    visibility:visible;
+    max-height: none;
 }
 
 .commentForm button[type=submit]{
@@ -113,4 +122,8 @@
 
 .commentForm button[type=submit]:hover{
     background: var(--green-300);
+}
+
+.commentList {
+    margin-top: 2rem;
 }
